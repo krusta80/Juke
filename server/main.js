@@ -10,7 +10,11 @@ var server = require('http').createServer();
 
 var createApplication = function () {
     var app = require('./app');
-    server.on('request', app); // Attach the Express application.
+	var swig = require('swig');
+	swig.setDefaults({ cache: false });
+	app.engine('html', swig.renderFile);
+	app.set('view engine', 'html');
+	server.on('request', app); // Attach the Express application.
 };
 
 var startServer = function () {

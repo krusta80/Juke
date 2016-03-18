@@ -1,29 +1,64 @@
 <!DOCTYPE html>
+{% block content %}
+
 <html lang="en">
   <head>
     <title>Juke</title>
     <link href="/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="/bootstrap-dark.css" rel="stylesheet" />
     <link href="/style.css" rel="stylesheet" />
+    <script src="/angular/angular.js"></script>
+    <script src="./scripts/index.js"></script>
   </head>
   <body>
-    <div id="main" class="container-fluid">
+    <div id="main" class="container-fluid" ng-app="juke">
 
-      <div class="col-xs-2">
+      <div class="col-xs-2" ng-controller="SideBarController">
         <sidebar>
           <img src="juke.svg" class="logo">
           <section>
             <h4 class="playlist-item active">
               <a href="#">ALBUMS</a>
             </h4>
+            {{}}
           </section>
         </sidebar>
       </div>
 
-      <div class="col-xs-10"></div>
+      <div class="col-xs-10" ng-controller="MainViewController">
+        <div class="album">
+          <p>
+              <h3>{{album.name}}</h3>
+              <img src="{{album.imageUrl}}" class="img-thumbnail">
+          </p>
+          <table class='table'>
+              <thead>
+                  <tr>
+                      <th></th>
+                      <th>Name</th>
+                      <th>Artists</th>
+                      <th>Genres</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr ng-repeat="(key, song) in album.songs">
+                      <td>
+                          <button class="btn btn-default btn-xs">
+                              <span class="glyphicon glyphicon-play"></span>
+                          </button>
+                      </td>
+                      <td>{{song.name}}</td>
+                      <td>{{getArtistString(song.artists)}}</td>
+                      <td>{{song.genres.join(", ")}}</td>
+                  </tr>
+              </tbody>
+          </table>
+        </div>
+      </div>
 
       <footer></footer>
 
     </div>
   </body>
 </html>
+{% endblock %}
