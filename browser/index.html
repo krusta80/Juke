@@ -44,7 +44,7 @@
                   <tr ng-repeat="(key, song) in album.songs">
                       <td>
                           <button class="btn btn-default btn-xs">
-                              <span class="glyphicon glyphicon-play"></span>
+                              <span class="glyphicon glyphicon-play" ng-click="playSong(song._id)"></span>
                           </button>
                       </td>
                       <td>{{song.name}}</td>

@@ -39,6 +39,14 @@ jukeModule.controller('MainViewController', function($scope, $http) {
 		albumFromServer.imageUrl = '/api/albums/' + albumFromServer._id + '.image';
 	    $scope.album = albumFromServer;
 	}).catch(console.error.bind(console));
+
+	$scope.playSong = function(url) {
+		console.log(url);
+		var audio = document.createElement('audio');
+		audio.src = '/api/songs/' + url + '.audio';
+		audio.load();
+		audio.play();
+	}
 });
 
 jukeModule.controller('SideBarController', function($scope) {
