@@ -40,12 +40,55 @@ jukeModule.controller('MainViewController', function($scope, $http) {
 	    $scope.album = albumFromServer;
 	}).catch(console.error.bind(console));
 
-	$scope.playSong = function(url) {
-		console.log(url);
-		var audio = document.createElement('audio');
-		audio.src = '/api/songs/' + url + '.audio';
-		audio.load();
-		audio.play();
+	$scope.activeIndex;
+	$scope.activeAudio;
+
+	$scope.toggleSong = function(ind) {
+		//console.log("ind is "+ind);
+		var oldInd = $scope.activeIndex;
+		$scope.pauseSong();
+		if(oldInd !== ind)
+			$scope.playSong(ind);
+		//console.log("new activeIndex is "+$scope.activeIndex);
+	}
+
+	$scope.playSong = function(ind) {
+		$scope.activeIndex = ind;
+		$scope.activeAudio = document.createElement('audio');
+		$scope.activeAudio.src = '/api/songs/' + $scope.album.songs[$scope.activeIndex]._id + '.audio';
+		$scope.activeAudio.addEventListener('timeupdate', function () {
+		    $scope.progress = 100 * $scope.activeAudio.currentTime / $scope.activeAudio.duration;
+			$scope.$apply();
+			//console.log($scope.progress);
+		});
+		$scope.activeAudio.load();
+		$scope.activeAudio.play();
+		$scope.activeAudio.onpause = function(e) {
+			var func = function() {
+				if($scope.activeAudio.currentTime == 0) {
+					$scope.deactivateSong(ind);	
+					$scope.$apply();	
+				}
+			}
+			func();
+		};
+		$scope.album.songs[$scope.activeIndex].isPlaying = true;
+	}
+
+	$scope.pauseSong = function(ind) {
+		if($scope.activeAudio === undefined) return;
+		if(ind === undefined) ind = $scope.activeIndex;
+		$scope.activeAudio.pause();
+		$scope.deactivateSong(ind);
+		$scope.activeIndex = undefined;
+	}
+
+	$scope.deactivateSong = function(ind) {
+		if(ind === undefined) ind = $scope.activeIndex;
+		if(ind > -1) {
+			$scope.album.songs[ind].isPlaying = false;
+			
+		}
 	}
 });
 

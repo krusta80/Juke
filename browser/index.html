@@ -29,7 +29,7 @@
         <div class="album">
           <p>
               <h3>{{album.name}}</h3>
-              <img src="{{album.imageUrl}}" class="img-thumbnail">
+              <img ng-src="{{album.imageUrl}}" class="img-thumbnail">
           </p>
           <table class='table'>
               <thead>
@@ -41,10 +41,10 @@
                   </tr>
               </thead>
               <tbody>
-                  <tr ng-repeat="(key, song) in album.songs">
+                  <tr ng-repeat="(key, song) in album.songs" ng-class="{active: song.isPlaying}">
                       <td>
                           <button class="btn btn-default btn-xs">
-                              <span class="glyphicon glyphicon-play" ng-click="playSong(song._id)"></span>
+                              <span class="glyphicon glyphicon-play" ng-click="toggleSong(key)" ng-class="{'glyphicon-pause': song.isPlaying, 'glyphicon-play': !song.isPlaying}"></span>
                           </button>
                       </td>
                       <td>{{song.name}}</td>
@@ -54,11 +54,30 @@
               </tbody>
           </table>
         </div>
-      </div>
+      <footer ng-show="activeIndex > -1">
+        <div>
+          <div class="pull-left">
+              <button ng-click="toggleSong(activeIndex-1)" class="btn btn-default" ng-show="activeIndex > 0">
+                  <span class="glyphicon glyphicon-step-backward"></span>
+              </button>
+              <button class="btn btn-default">
+                  <span ng-click="pauseSong()" class="glyphicon glyphicon-pause"></span>
+              </button>
+              <button ng-click="toggleSong(activeIndex+1)" class="btn btn-default" ng-show="activeIndex < album.songs.length-1">
+                  <span class="glyphicon glyphicon-step-forward"></span>
+              </button>
+          </div>
+          <div class="bar">
+              <div class="progress">
+                  <div class="progress-bar" ng-style="{width: progress + '%'}"></div>
+              </div>
+          </div>
+       </div>
+      </footer>
+    </div>
 
-      <footer></footer>
+      
 
     </div>
   </body>
 </html>
-{% endblock %}
