@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-{% block content %}
-
 <html lang="en">
   <head>
     <title>Juke</title>
@@ -13,7 +11,7 @@
   <body>
     <div id="main" class="container-fluid" ng-app="juke">
 
-      <div class="col-xs-2" ng-controller="SideBarController">
+      <div class="col-xs-2">
         <sidebar>
           <img src="juke.svg" class="logo">
           <section>
@@ -25,7 +23,7 @@
         </sidebar>
       </div>
 
-      <div class="col-xs-10" ng-controller="MainViewController">
+      <div class="col-xs-10" ng-controller="AlbumController">
         <div class="album">
           <p>
               <h3>{{album.name}}</h3>
@@ -54,29 +52,29 @@
               </tbody>
           </table>
         </div>
-      <footer ng-show="activeIndex > -1">
-        <div>
+      
+    </div>
+
+      <footer>
+        <div ng-controller="PlayerController" ng-hide="activeAudio.paused">
           <div class="pull-left">
-              <button ng-click="toggleSong(activeIndex-1)" class="btn btn-default" ng-show="activeIndex > 0">
+              <button ng-click="playPreviousSong()" class="btn btn-default" ng-show="!firstSong">
                   <span class="glyphicon glyphicon-step-backward"></span>
               </button>
               <button class="btn btn-default">
-                  <span ng-click="pauseSong()" class="glyphicon glyphicon-pause"></span>
+                  <span ng-click="togglePauseButton()" class="glyphicon glyphicon-pause"></span>
               </button>
-              <button ng-click="toggleSong(activeIndex+1)" class="btn btn-default" ng-show="activeIndex < album.songs.length-1">
+              <button ng-click="playNextSong()" class="btn btn-default" ng-show="!lastSong">
                   <span class="glyphicon glyphicon-step-forward"></span>
               </button>
           </div>
           <div class="bar">
-              <div class="progress">
+              <div class="progress" ng-click="seekSong($event)">
                   <div class="progress-bar" ng-style="{width: progress + '%'}"></div>
               </div>
           </div>
        </div>
       </footer>
-    </div>
-
-      
 
     </div>
   </body>
